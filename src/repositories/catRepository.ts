@@ -48,7 +48,9 @@ class CatRepository {
       return cats;
     }
 
-    return cats.filter((e: Cat): boolean => e.name.includes(keyword));
+    return cats.filter((e: Cat): boolean =>
+      e.name.toLowerCase().includes(keyword.toLowerCase())
+    );
   }
 
   /**
