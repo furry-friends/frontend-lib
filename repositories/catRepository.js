@@ -91,7 +91,9 @@ var CatRepository = /** @class */ (function () {
                         if (!keyword) {
                             return [2 /*return*/, cats];
                         }
-                        return [2 /*return*/, cats.filter(function (e) { return e.name.includes(keyword); })];
+                        return [2 /*return*/, cats.filter(function (e) {
+                                return e.name.toLowerCase().includes(keyword.toLowerCase());
+                            })];
                 }
             });
         });

@@ -19,3 +19,4 @@ __exportStar(require("./helpers/sortCatsBy"), exports);
 __exportStar(require("./states/cats"), exports);
 __exportStar(require("./types/interfaces"), exports);
 __exportStar(require("./repositories/catRepository"), exports);
+__exportStar(require("./helpers/debounce"), exports);
