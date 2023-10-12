@@ -1,4 +1,4 @@
-import Cat from '../../src/models/Cat';
+import { Cat } from '../../src/models/Cat';
 
 test('constructor', () => {
   const cat = new Cat({
