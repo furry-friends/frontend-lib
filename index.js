@@ -17,3 +17,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./models/Cat"), exports);
 __exportStar(require("./helpers/sortCatsBy"), exports);
 __exportStar(require("./states/cats"), exports);
+__exportStar(require("./types/interfaces"), exports);
+__exportStar(require("./repositories/catRepository"), exports);
