@@ -1,0 +1,53 @@
+name: Node CICD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Create 'package.json' for dist folder
+        run: |
+          VERSION=$(node -pe "require('./package.json').version")
+          echo '{
+            "name": "frontend-lib",
+            "version": "'"$VERSION"'",
+            "description": "",
+            "main": "index.js"
+          }' > dist/package.json
+
+      - name: list dist folder
+        run: ls dist -la
+
+      - name: Deploy to built brunch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: built
+          folder: dist
+          commit-message: From ${{ github.sha }}
