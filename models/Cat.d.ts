@@ -5,7 +5,7 @@ interface CatPropos {
     readonly gender: Gender;
     readonly birthday: string;
     readonly bio: string;
-    readonly picture: string;
+    readonly picture?: string;
 }
 declare class Cat implements CatPropos {
     readonly id: number;
@@ -13,7 +13,7 @@ declare class Cat implements CatPropos {
     readonly gender: Gender;
     readonly birthday: string;
     readonly bio: string;
-    readonly picture: string;
+    readonly picture?: string;
     constructor({ id, name, gender, birthday, bio, picture }: CatPropos);
     /**
      * Returns true if the cat is new which has not been saved to the database.
@@ -27,8 +27,9 @@ declare class Cat implements CatPropos {
     copyWith: (props: Partial<CatPropos>) => Cat;
     toString: () => string;
     static empty: () => Cat;
-    static fromJson: (json: Record<string, any>) => Cat;
-    static isValidBirthday: (birthday: string) => boolean;
+    static fromJson: (json: Record<string, unknown>) => Cat;
+    static isValidBirthday: (birthday?: string) => boolean;
+    static isValidGender: (gender?: string) => boolean;
 }
 export { Cat };
 export type { Gender };

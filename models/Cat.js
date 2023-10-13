@@ -30,7 +30,7 @@ var Cat = /** @class */ (function () {
             });
         };
         this.id = id;
-        this.gender = gender;
+        this.gender = gender.trim().toLowerCase();
         this.name = name;
         this.birthday = birthday;
         this.bio = bio;
@@ -75,25 +75,37 @@ var Cat = /** @class */ (function () {
             gender: '',
             birthday: '',
             bio: '',
-            picture: '',
         });
     };
     Cat.fromJson = function (json) {
-        if (_a.isValidBirthday(json.birthday) === false ||
-            ['boy', 'girl'].indexOf(json.gender) === -1) {
+        var _b, _c, _d, _e, _f;
+        var id = Number(json.id);
+        var birthday = (_b = json.birthday) === null || _b === void 0 ? void 0 : _b.toString();
+        var gender = (_c = json.gender) === null || _c === void 0 ? void 0 : _c.toString();
+        var name = (_d = json.name) === null || _d === void 0 ? void 0 : _d.toString();
+        var bio = (_e = json.bio) === null || _e === void 0 ? void 0 : _e.toString();
+        var picture = (_f = json.picture) === null || _f === void 0 ? void 0 : _f.toString();
+        if (typeof id !== 'number' ||
+            isNaN(id) ||
+            name === undefined ||
+            _a.isValidBirthday(birthday) === false ||
+            _a.isValidGender(gender) === false) {
             throw new Error('Invalid cat data');
         }
         return new _a({
-            id: json.id,
-            name: json.name,
-            gender: json.gender,
-            birthday: json.birthday,
-            bio: json.bio,
-            picture: json.picture,
+            id: id,
+            name: name,
+            gender: gender,
+            birthday: birthday,
+            bio: bio !== null && bio !== void 0 ? bio : '',
+            picture: picture,
         });
     };
     Cat.isValidBirthday = function (birthday) {
-        return /^\d{4}-\d{2}-\d{2}$/.test(birthday);
+        return birthday !== undefined && /^\d{4}-\d{2}-\d{2}$/.test(birthday);
+    };
+    Cat.isValidGender = function (gender) {
+        return gender !== undefined && /^\s*(?:boy|girl)\s*$/i.test(gender);
     };
     return Cat;
 }());
