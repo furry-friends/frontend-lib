@@ -6,7 +6,7 @@ interface CatPropos {
   readonly gender: Gender;
   readonly birthday: string;
   readonly bio: string;
-  readonly picture: string;
+  readonly picture?: string;
 }
 
 class Cat implements CatPropos {
@@ -15,11 +15,11 @@ class Cat implements CatPropos {
   readonly gender: Gender;
   readonly birthday: string;
   readonly bio: string;
-  readonly picture: string;
+  readonly picture?: string;
 
   constructor({ id, name, gender, birthday, bio, picture }: CatPropos) {
     this.id = id;
-    this.gender = gender;
+    this.gender = gender.trim().toLowerCase() as Gender;
     this.name = name;
     this.birthday = birthday;
     this.bio = bio;
@@ -75,29 +75,41 @@ class Cat implements CatPropos {
       gender: '',
       birthday: '',
       bio: '',
-      picture: '',
     });
 
-  static fromJson = (json: Record<string, any>): Cat => {
+  static fromJson = (json: Record<string, unknown>): Cat => {
+    const id = Number(json.id);
+    const birthday = json.birthday?.toString();
+    const gender = json.gender?.toString();
+    const name = json.name?.toString();
+    const bio = json.bio?.toString();
+    const picture = json.picture?.toString();
+
     if (
-      this.isValidBirthday(json.birthday) === false ||
-      ['boy', 'girl'].indexOf(json.gender) === -1
+      typeof id !== 'number' ||
+      isNaN(id) ||
+      name === undefined ||
+      this.isValidBirthday(birthday) === false ||
+      this.isValidGender(gender) === false
     ) {
       throw new Error('Invalid cat data');
     }
 
     return new Cat({
-      id: json.id,
-      name: json.name,
-      gender: json.gender,
-      birthday: json.birthday,
-      bio: json.bio,
-      picture: json.picture,
+      id: id,
+      name: name,
+      gender: gender as Gender,
+      birthday: birthday!,
+      bio: bio ?? '',
+      picture: picture,
     });
   };
 
-  static isValidBirthday = (birthday: string): boolean =>
-    /^\d{4}-\d{2}-\d{2}$/.test(birthday);
+  static isValidBirthday = (birthday?: string): boolean =>
+    birthday !== undefined && /^\d{4}-\d{2}-\d{2}$/.test(birthday);
+
+  static isValidGender = (gender?: string): boolean =>
+    gender !== undefined && /^\s*(?:boy|girl)\s*$/i.test(gender);
 }
 
 export { Cat };

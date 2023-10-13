@@ -7,7 +7,6 @@ test('constructor', () => {
     gender: 'boy',
     birthday: '2020-01-01',
     bio: 'bio',
-    picture: '',
   });
 
   expect(cat.id).toBe(1);
@@ -24,7 +23,6 @@ test('copyWith', () => {
     gender: 'boy',
     birthday: '',
     bio: 'bio',
-    picture: '',
   });
 
   cat = cat.copyWith({ id: 2, name: 'cat2' });
@@ -39,7 +37,6 @@ test('isNew', () => {
     gender: 'boy',
     birthday: '',
     bio: '',
-    picture: '',
   });
 
   expect(cat.isNew).toBe(true);
@@ -61,7 +58,6 @@ test('age getter', () => {
     gender: '',
     birthday: '2023-10-01',
     bio: 'bio',
-    picture: '',
   });
 
   expect(cat.age).toBe(9);
@@ -76,10 +72,10 @@ test('toString', () => {
     gender: '',
     birthday: '2023-10-01',
     bio: 'bio',
-    picture: '',
   });
+
   expect(cat.toString()).toBe(
-    '{"id":1,"name":"cat","gender":"","birthday":"2023-10-01","bio":"bio","picture":""}'
+    '{"id":1,"name":"cat","gender":"","birthday":"2023-10-01","bio":"bio"}'
   );
 });
 
@@ -118,5 +114,35 @@ describe('fromJson', () => {
         bio: 'bio',
       })
     ).toThrowError();
+  });
+});
+
+describe('isValidBirthday', () => {
+  test('valid birthday', () => {
+    expect(Cat.isValidBirthday('2023-10-11')).toBe(true);
+  });
+
+  test('invalid birthday', () => {
+    expect(Cat.isValidBirthday('1234')).toBe(false);
+  });
+});
+
+describe('isValidGender', () => {
+  test('valid gender', () => {
+    expect(Cat.isValidGender('boy')).toBe(true);
+    expect(Cat.isValidGender('girl')).toBe(true);
+  });
+
+  test('Case insensitive', () => {
+    expect(Cat.isValidGender('BOY')).toBe(true);
+    expect(Cat.isValidGender('GIRL')).toBe(true);
+  });
+
+  test('allow leading and triliing spaces', () => {
+    expect(Cat.isValidGender(' BOY ')).toBe(true);
+  });
+
+  test('invalid gender', () => {
+    expect(Cat.isValidGender('male')).toBe(false);
   });
 });
